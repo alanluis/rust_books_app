@@ -1,4 +1,6 @@
 use std::io;
+use prettytable::{Table, Row, Cell};
+use prettytable::format;
 
 struct Book {
     title: String,
@@ -50,13 +52,32 @@ fn list_books(catalog: &Vec<Book>) {
 
     println!("List of Books:");
 
-    for (index, book) in catalog.iter().enumerate() {
-        println!("Book #{}:", index + 1);
-        println!("Title: {}", &book.title);
-        println!("Author: {}", &book.author);
-        println!("Genre: {}", &book.genre);
-        println!("Publication Year: {}", book.year);
+    // Create a new table
+    let mut table = Table::new();
+
+    // Set the table format
+    table.set_format(*format::consts::FORMAT_CLEAN);
+
+    // Add table headers
+    table.add_row(Row::new(vec![
+        Cell::new("Title").style_spec("bF"),
+        Cell::new("Author").style_spec("bF"),
+        Cell::new("Genre").style_spec("bF"),
+        Cell::new("Publication Year").style_spec("bF"),
+        ]));
+        
+        for book in catalog {
+        // Add a row to the table for each book
+        table.add_row(Row::new(vec![
+            Cell::new(&book.title),
+            Cell::new(&book.author),
+            Cell::new(&book.genre),
+            Cell::new(&book.year.to_string()),
+        ]));
     }
+
+    // Print the table
+    table.printstd();
 }
 
 fn main() {
